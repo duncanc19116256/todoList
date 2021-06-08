@@ -1,0 +1,57 @@
+
+.todoContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* background-color: #c2e5d7; */
+    width: 100%;
+
+
+}
+
+.editsContainer {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: flex-end; */
+    padding-left: 30px;
+    padding-right: 30px;
+
+    
+    border-top: #666668 2px solid;
+
+}
+
+button {
+    height: 30px;
+    width: 30px;
+    margin-top: 10px;
+    margin-left: 5px;
+
+    border: none;
+    border-radius: 5px;;
+
+    font-weight: bolder;
+    font-size: 20px;
+    color: #ffffff;
+
+    cursor: pointer;
+
+}
+
+.addEvent {
+    background-color: #4dc4ec;
+}
+
+.removeEvent {
+    background-color: #9ecd49;
+}
+
+
+
+.cardsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}

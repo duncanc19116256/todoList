@@ -1,0 +1,33 @@
+.headerContainer{ 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+    Font-size: 40px;
+
+   
+
+
+}
+
+.headerName {
+    /* height: 80px; */
+
+}
+
+.headerName1 {
+    color: #666668;
+}
+
+.headerName2 {
+    color: #4dc4ec;
+    font-weight: bolder;
+
+}
+
+.headerName3 {
+    color: #9ecd49;
+    font-weight: bolder;
+
+}

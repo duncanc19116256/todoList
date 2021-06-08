@@ -1,0 +1,138 @@
+
+.cardContainer{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    border: 2px #666668 solid;
+    border-radius: 5px;
+    height: 250px;
+    width: 250px;
+
+    padding: 20px 10px;
+    margin: 5px 10px;
+    
+    box-shadow: 5px 5px 5px #c2e5d7;
+    background-color: #ffffff;
+}
+
+
+.cardRemoveContainer{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    border: 2px #eb4034 solid;
+    border-radius: 5px;
+    height: 250px;
+    width: 250px;
+
+    padding: 20px 10px;
+    margin: 5px 10px;
+    
+/* 
+    background-color: #eb4034; */
+    ;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    
+}
+
+.cardName {
+    font-size: 25px;
+    color: #666668;
+}
+
+.addTodo {
+    font-size: 25px;
+    color: #666668;
+    cursor: pointer;
+
+}
+
+.scrollableContainer {
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+    width: 100%;
+}
+
+
+
+.cardDescription {
+    text-align: left;
+}
+
+.todoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    margin-bottom: 5px;
+
+    border-bottom: #666668 1px solid;
+}
+
+.cardDetails {
+    text-align: left;
+    /* margin-bottom: 5px; */
+    padding: 2px 5px;
+        
+
+    /* border:#9ecd49 2px solid; */
+    border-radius: 5px;
+    width: 80%;
+
+    color: #666668;
+    cursor: pointer;
+
+}
+
+
+.todoDelete {
+    border:#666668 1px solid;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    
+    text-align: center;
+    font-size: 8px;
+    background-color: #666668;
+    color: #ffffff;
+
+    cursor: pointer;
+}
+
+
+.removeOverlay {
+
+    position: absolute;
+    background-color: #eb4034;
+    opacity: 0.5;
+    border: 2px #eb4034 solid;
+
+    border-radius: 5px;
+    padding: 20px 10px;
+    margin: 5px 10px;
+
+    height: 250px;
+    width: 250px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 50px;
+    text-align: center;
+
+    transform: translate(-8%, -9%);
+
+
+}
