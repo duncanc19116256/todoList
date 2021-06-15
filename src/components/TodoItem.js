@@ -7,10 +7,8 @@
  */
 
 
-import { useState, useEffect, useRef} from 'react';
-import { TextInput } from 'react-native';
-import { isCompositeComponent } from 'react-dom/test-utils';
-import { ClickAwayListener } from '@material-ui/core';
+import { useRef } from 'react';
+
 
 
 
@@ -34,7 +32,6 @@ function Card(props) {
 
     const updateMessage = () =>
     {        
-        console.log("uipdateMessage onBlur");
         updateTodoItemMessage(todoItemKey, todoItemRef.current.value);
 
     }
@@ -47,10 +44,10 @@ function Card(props) {
         <div className={tStyle.todoItemContainer}>
             <input type="text" 
                    placeholder="what to do... " 
-                   defaultValue={card.todoList[todoItemKey]} 
+                   value={todo} 
                    ref={todoItemRef}
                    className={tStyle.messageInput}
-                   onBlur={updateMessage}
+                   onChange={updateMessage}
                    />
             
             <div className={tStyle.deleteContainer} onClick={deleteCurrent}>✘</div>

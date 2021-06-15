@@ -7,18 +7,18 @@
  */
 
 
-import {useState, useEffect, useRef} from 'react';
-import { isCompositeComponent } from 'react-dom/test-utils';
+import {useState, useEffect } from 'react';
+
 
 import Card from '../components/Card.js'
 import tStyle from './style/Todo.module.css';
-import Checkbox from '@material-ui/core';
+
 
 
 function Todo() {
 
-    console.log("checkpoint 1 at Todo");
 
+    
     var cardsDefault = new Object();
     cardsDefault = {
         0: {
@@ -31,12 +31,12 @@ function Todo() {
         
     };
 
-    // const checkSaveAction = localStorage.getItem("saveAction") === "true";
-    // console.log("checkSaveAction: ", checkSaveAction);
 
     
-    const [cards, setCards] = useState(cardsDefault);
-    const [key, setKey] = useState(1);                      // cardKey
+    const checkSaveAction = localStorage.getItem("saveAction") === "true";
+
+    const [cards, setCards] = useState(checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
+    const [key, setKey] = useState(checkSaveAction ? parseInt(localStorage.getItem("cardKey")) : 1);                      // cardKey
     const [removeState, setRemoveState] = useState(false);
 
     const [saveList, setSaveList] = useState(true);
@@ -44,11 +44,11 @@ function Todo() {
 
     const updateLocal = () =>
     {
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
-        // localStorage.setItem("saveAction", saveList);
-        // localStorage.setItem("cardKey", key);
-        // console.log("updateLocal done");
-        // console.log("check: ", JSON.parse(localStorage.getItem("savedCards")));
+        console.log("check when here")
+        localStorage.setItem("savedCards", JSON.stringify(cards));
+        localStorage.setItem("saveAction", saveList);
+        localStorage.setItem("cardKey", key);
+  
             
     }
 
@@ -62,7 +62,7 @@ function Todo() {
                     state.
         Parameters: none
     */
-    const addCard = () => 
+    const addCard = async() => 
     {
 
         setRemoveState(false);
@@ -74,10 +74,8 @@ function Todo() {
         setKey(prev => prev + 1);
 
         setCards(prev => prev = tempCard);
+     
         
-        updateLocal();
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
-
 
     }
 
@@ -92,19 +90,14 @@ function Todo() {
     const removeCard = (cardKey) => 
     { 
         /* Ensures only delete card when removeState is on */
-        console.log("removeCard cardKey: ", cardKey);
-
         let tempCards = Object.assign({}, cards);
            
         delete tempCards[cardKey];
-        console.log("REMOVE ALERT! cardKey: ", cardKey, " from: ", cards, " and get: " , tempCards);
+
         setCards(prev => prev = tempCards);
             
 
-
-        updateLocal();
-
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
+        
 
     }
     
@@ -118,16 +111,11 @@ function Todo() {
     const updateCardName = (cardKey, cardName) => 
     {
         let tempCards = Object.assign({}, cards);
-        console.log("before updateCardName: ", tempCards);
 
         tempCards[cardKey].name = cardName;
-        console.log("after updateCardName: ", tempCards);
         setCards(prev => prev = tempCards);
-        // console.log("todojs updateCardName: ", cards[cardKey].name );
 
-        updateLocal();
-
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
+        
 
 
     }
@@ -157,12 +145,8 @@ function Todo() {
            added correctly each time */
         tempCards[cardKey].todoListKey++;
         setCards(prev => prev = tempCards);
-        console.log("todojs addTodoItem cards: ", cards);
 
-        updateLocal();
-
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
-
+     
 
     }
 
@@ -186,21 +170,12 @@ function Todo() {
         /*  Only deletes the todoItem if the card has todoItemList > 1 */
         if (Object.keys(cards[cardKey].todoList).length > 1) {
             let tempCards = Object.assign({}, cards);
-            console.log("todoJs deleteTodoItem todoList: ", tempCards[cardKey].todoList);
-            console.log("todoJs deleteTodoItem todoItemKey: ", todoItemKey);
 
-            console.log("todoJs deleteTodoItem: b4 ", tempCards[cardKey].todoList[todoItemKey]);
+            
             delete tempCards[cardKey].todoList[todoItemKey];
-            console.log("todoJs deleteTodoItem: after ", tempCards[cardKey].todoList[todoItemKey]);
 
+            
             setCards(prev => prev = tempCards);
-            console.log("todoJs deleteTodoItem cards: ", cards);
-            console.log("todoJs deleteTodoItem tempCards: ", tempCards);
-
-            updateLocal();
-
-            // localStorage.setItem("savedCards", JSON.stringify(cards));
-
 
 
         }
@@ -222,32 +197,34 @@ function Todo() {
         let tempCards = Object.assign({}, cards);
         
         tempCards[cardKey].todoList[todoItemKey] = message;
-
+        console.log("what is the cardKey: ", cardKey)
+        console.log("what is cards[cardKey]: ", cards[cardKey])
+        console.log("what is tempCards[cardKey].todoList[todoItemKey]: ", tempCards[cardKey].todoList[todoItemKey])
+        console.log("what is in cards: ", cards);
         setCards(prev => prev = tempCards);
         
-        // localStorage.setItem("savedCards", JSON.stringify(cards));
-
-        updateLocal();
-
-        // console.log("Todojs updateTodoItemMessage card message: ", cards[cardKey].todoList[todoItemKey])
+       
     }
 
-    useEffect(async() => 
-    {
-       
-        // if (checkSaveAction) {
-        //     await setCards(JSON.parse(localStorage.getItem("savedCards")));
-        //     setKey(parseInt(localStorage.getItem("cardKey")));
-        //     console.log("Todojs UseEffect key: ", key);
-        //     console.log("Todojs UseEffect localStorage key: ", localStorage.getItem("cardKey"));
 
-        // }
-        // else {
-        //     localStorage.setItem("savedCards", JSON.stringify(cards));
-        //     localStorage.setItem("cardKey", key);
-        // }
+    /*  acts like a callback function to setCards */
+    useEffect(() =>
+    {
+        updateLocal()
+    }, [cards])
+
+
+
+    useEffect(() => 
+    {
+
+        console.log("checkSaveAction? " , checkSaveAction)
+        if (!checkSaveAction) {
+            localStorage.setItem("savedCards", JSON.stringify(cards));
+            localStorage.setItem("cardKey", key);
+        }
      
-        // localStorage.setItem("saveAction", saveList);
+        localStorage.setItem("saveAction", saveList);
 
         
         

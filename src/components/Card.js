@@ -7,8 +7,8 @@
  */
 
 
-import {useState, useEffect, useRef} from 'react';
-import { isCompositeComponent } from 'react-dom/test-utils';
+import { useRef } from 'react';
+
 
 import TodoItem from '../components/TodoItem.js'
 
@@ -17,7 +17,7 @@ import cStyle from './style/Card.module.css';
 
 
 function Card(props) {
-    const {cardKey, card, cards, addTodoItem, deleteTodoItem, removeCard, updateTodoItemMessage, updateCardName, removeState} = props;
+    const {cardKey, card, addTodoItem, deleteTodoItem, removeCard, updateTodoItemMessage, updateCardName, removeState} = props;
  
     
     const removeCardID = useRef(null);
@@ -25,24 +25,8 @@ function Card(props) {
 
     
     
-    const switchColor = (elem) => {
-        console.log("fired once");
-        if (elem.target.style.textDecoration == "line-through") {
-            console.log("clicked ", elem.target.style.textDecoration)
-            elem.target.style.textDecoration = "";
-            elem.target.style.backgroundColor = "#ffffff";
-            elem.target.style.color = "#666668";
-        }
-        else {
-            // elem.target.style.backgroundColor = "#9ecd49";
-            elem.target.style.color = "#9ecd49";
-            elem.target.style.textDecoration = "line-through";
-
-            // elem.target.style.border = "#9ecd49 2px solid"
-        }
-      
-
-    }
+   
+    
 
     /*  addTodo()
         Purpose:    calls addTodoItem and pass in cardKey
@@ -58,7 +42,7 @@ function Card(props) {
 
     const updateCardNameWithTarget = () => 
     {
-        console.log("cardjs updateCardNameWthTar targetval: ", cardRef.current.value);
+
         updateCardName(cardKey, cardRef.current.value)
     }
 
@@ -90,10 +74,12 @@ function Card(props) {
     const updateTodoItemMessageWithKey = (todoItemKey, message) => 
     {
         updateTodoItemMessage(cardKey, todoItemKey, message);
+        console.log("what is the cardKey: ", cardKey)
+
     }
 
-
-   
+  
+    
 
 
     return (
@@ -102,12 +88,12 @@ function Card(props) {
             <div className={cStyle.titleContainer}> 
                 <input type="text" 
                        placeholder="Enter a name..." 
-                       defaultValue={card.name} 
+                       value={card.name} 
                        ref={cardRef}
                        className={cStyle.titleInput}
-                       onBlur={updateCardNameWithTarget}
+                       onChange={updateCardNameWithTarget}
                        />
-                <div className={cStyle.addTodo} onClick={() => {addTodo(); console.log("add button clicked")}}>＋</div>
+                <div className={cStyle.addTodo} onClick={() => {addTodo();}}>＋</div>
             </div>
             
 
@@ -117,7 +103,7 @@ function Card(props) {
                     Object.keys(card.todoList).map((todoItemKey, index) => {
 
                         return (
-                            // console.log("card.js ")
+
                             <TodoItem todo={card.todoList[todoItemKey]}
                                       card={card}
                                       todoItemKey = {todoItemKey}
