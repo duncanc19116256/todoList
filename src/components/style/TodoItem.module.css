@@ -1,0 +1,17 @@
+.todoItemContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    margin-top: 10px;
+    padding-left: 1vw;
+    
+}
+
+.messageInput {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    font-size: 15px;
+    margin-right: 1vw;
+}

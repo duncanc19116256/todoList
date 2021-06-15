@@ -32,14 +32,13 @@
     width: 250px;
 
     padding: 20px 10px;
-    margin: 5px 10px;
-    
-/* 
-    background-color: #eb4034; */
-    ;
+    margin: 5px 10px;    
+
 }
 
 .titleContainer {
+    position: relative;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -47,9 +46,11 @@
     
 }
 
-.cardName {
-    font-size: 25px;
-    color: #666668;
+.titleInput {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    font-size: 20px;
 }
 
 .addTodo {
@@ -60,63 +61,24 @@
 }
 
 .scrollableContainer {
+    position: relative;
+
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     overflow: scroll;
     width: 100%;
 }
 
+.removeOverlayContainer {
+    position: absolute;
 
-
-.cardDescription {
-    text-align: left;
-}
-
-.todoContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    align-content: center;
-    margin-bottom: 5px;
-
-    border-bottom: #666668 1px solid;
-}
-
-.cardDetails {
-    text-align: left;
-    /* margin-bottom: 5px; */
-    padding: 2px 5px;
-        
-
-    /* border:#9ecd49 2px solid; */
-    border-radius: 5px;
-    width: 80%;
-
-    color: #666668;
-    cursor: pointer;
+    transform: translate(-7%, -9%);
 
 }
-
-
-.todoDelete {
-    border:#666668 1px solid;
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    
-    text-align: center;
-    font-size: 8px;
-    background-color: #666668;
-    color: #ffffff;
-
-    cursor: pointer;
-}
-
 
 .removeOverlay {
 
-    position: absolute;
     background-color: #eb4034;
     opacity: 0.5;
     border: 2px #eb4034 solid;
@@ -132,7 +94,6 @@
     font-size: 50px;
     text-align: center;
 
-    transform: translate(-8%, -9%);
 
 
 }
