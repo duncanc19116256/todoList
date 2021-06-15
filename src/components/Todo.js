@@ -7,7 +7,7 @@
  */
 
 
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import { isCompositeComponent } from 'react-dom/test-utils';
 
 import Card from '../components/Card.js'
@@ -40,7 +40,8 @@ function Todo() {
     const [removeState, setRemoveState] = useState(false);
 
     const [saveList, setSaveList] = useState(true);
-
+    const addButtonRef = useRef(null);
+    const removeButtonRef = useRef(null);
 
     const updateLocal = () =>
     {
@@ -48,6 +49,7 @@ function Todo() {
         localStorage.setItem("saveAction", saveList);
         localStorage.setItem("cardKey", key);
         console.log("updateLocal done");
+        console.log("check: ", JSON.parse(localStorage.getItem("savedCards")));
             
     }
 
@@ -72,8 +74,8 @@ function Todo() {
         /*  increment key by 1 */
         setKey(prev => prev + 1);
 
-        setCards(tempCard);
-
+        setCards(prev => prev = tempCard);
+        
         updateLocal();
         // localStorage.setItem("savedCards", JSON.stringify(cards));
 
@@ -96,6 +98,7 @@ function Todo() {
         let tempCards = Object.assign({}, cards);
            
         delete tempCards[cardKey];
+        console.log("REMOVE ALERT! cardKey: ", cardKey, " from: ", cards, " and get: " , tempCards);
         setCards(prev => prev = tempCards);
             
 
@@ -121,7 +124,7 @@ function Todo() {
         tempCards[cardKey].name = cardName;
         console.log("after updateCardName: ", tempCards);
         setCards(prev => prev = tempCards);
-        console.log("todojs updateCardName: ", cards[cardKey].name );
+        // console.log("todojs updateCardName: ", cards[cardKey].name );
 
         updateLocal();
 
@@ -240,35 +243,18 @@ function Todo() {
             console.log("Todojs UseEffect localStorage key: ", localStorage.getItem("cardKey"));
 
         }
+        else {
+            localStorage.setItem("savedCards", JSON.stringify(cards));
+            localStorage.setItem("cardKey", key);
+        }
+     
         localStorage.setItem("saveAction", saveList);
 
         
         
     }, []);
 
-    useEffect(() => {
-
-       
-        const addCardButton = document.getElementById("addCardButton");
-        const removeCardButton = document.getElementById("removeCardButton");
-
-        
-        const updateRemoveState = () => 
-        {
-            setRemoveState((prev) => !prev); 
-        }
-        addCardButton.addEventListener("click", addCard);
-        removeCardButton.addEventListener("click", updateRemoveState);
-        
-        console.log("Todo UseEffeect cards: " , cards);
-
-        return (() => 
-        {
-            addCardButton.removeEventListener("click", addCard);
-            removeCardButton.removeEventListener("click", updateRemoveState);
-
-        });
-    }, [addCard])
+    
 
 
     return (
@@ -276,13 +262,15 @@ function Todo() {
             <div className={tStyle.editsContainer}>
                 <div className={tStyle.editButtons}>
                     <button className={tStyle.addEvent}
-                            // onClick={addCard}
+                            ref={addButtonRef}
+                            onClick={addCard}
                             id="addCardButton">
                         ＋
                     </button>
                     <button className={tStyle.removeEvent}
+                            ref={removeButtonRef}
                             id="removeCardButton"
-                            /* onClick={() => {console.log(removeState); setRemoveState(!removeState); console.log(removeState)}} */>
+                            onClick={() => setRemoveState((prev) => !prev)} >
                         －
                     </button>
                 </div>
@@ -298,11 +286,10 @@ function Todo() {
                 {
                     
                     Object.keys(cards).map((cardKey, index) => {
-                        console.log("Todo.js cardKey: ", cardKey);
-                        console.log("todojs objecke: ", Object.keys(cards));
                         return (
                             <Card removeCard = {removeCard}
                                   removeState = {removeState} 
+                                  cards={cards}
                                   card = {cards[cardKey]}
                                   cardKey = {cardKey}
                                   addTodoItem={addTodoItem}

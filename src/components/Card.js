@@ -17,16 +17,14 @@ import cStyle from './style/Card.module.css';
 
 
 function Card(props) {
-    const {cardKey, card, addTodoItem, deleteTodoItem, removeCard, updateTodoItemMessage, updateCardName, removeState} = props;
+    const {cardKey, card, cards, addTodoItem, deleteTodoItem, removeCard, updateTodoItemMessage, updateCardName, removeState} = props;
  
     
     const removeCardID = useRef(null);
     const cardRef = useRef(null);
-    const [cardName, setCardName] = useState(props.card.name);
-        
-    let inputEdited = false;
-    // const removeCardID = "removeCard" + cardKey;
 
+    
+    
     const switchColor = (elem) => {
         console.log("fired once");
         if (elem.target.style.textDecoration == "line-through") {
@@ -66,9 +64,7 @@ function Card(props) {
 
     const removeCardWithKey = () => 
     { 
-        if (removeState) {
-            removeCard(cardKey);
-        }
+        removeCard(cardKey);
     }
 
     /*  deleteTodoItemWithKey()
@@ -97,35 +93,7 @@ function Card(props) {
     }
 
 
-    useEffect(() =>
-    {
-        const titleInput = document.getElementById(cardKey);
-        const overlayRemoveCard = document.getElementById(removeCardID);
-        /*  checks if the mouse is clicked outside of the provided target
-            then calls corresponding function within */
-        function checkOutside(e) 
-        {
-            // console.log("todoItem checkOutside called: ", inputEdited);
-            var clickedInsideInput = titleInput.contains(e.target);
-            if (inputEdited && !clickedInsideInput) {
-                console.log("TodoItem oh shet clicked outside");
-                updateCardNameWithTarget();
-                inputEdited = false;
-            }
-        }
-
-        titleInput.addEventListener("click", () => inputEdited = true);
-        removeCardID.current.addEventListener("click", removeCardWithKey);
-        document.addEventListener("click", (e) => checkOutside(e));
-
-        return (() => 
-        {
-            titleInput.removeEventListener("click", () => inputEdited = true)
-            // removeCardID.current.removeEventListener("click", removeCardWithKey);
-            document.removeEventListener("click", (e) => checkOutside(e));
-        })
-
-    })
+   
 
 
     return (
@@ -134,11 +102,11 @@ function Card(props) {
             <div className={cStyle.titleContainer}> 
                 <input type="text" 
                        placeholder="Enter a name..." 
-                       defaultValue={cardName} 
-                       id={cardKey}
+                       defaultValue={card.name} 
                        ref={cardRef}
                        className={cStyle.titleInput}
-                       onChange={() => {inputEdited=true; console.log("inputEdited Changed from CardJS: ", cardKey, " ", inputEdited)}}/>
+                       onBlur={updateCardNameWithTarget}
+                       />
                 <div className={cStyle.addTodo} onClick={() => {addTodo(); console.log("add button clicked")}}>＋</div>
             </div>
             
@@ -151,6 +119,7 @@ function Card(props) {
                         return (
                             // console.log("card.js ")
                             <TodoItem todo={card.todoList[todoItemKey]}
+                                      card={card}
                                       todoItemKey = {todoItemKey}
                                       key = {index}
                                       deleteTodoItem={deleteTodoItemWithKey}
@@ -163,7 +132,7 @@ function Card(props) {
                 
             </div>
             <div  ref={removeCardID} className={cStyle.removeOverlayContainer}>
-                {removeState ? <div className={cStyle.removeOverlay}>CLICK TO REMOVE</div> : <span></span>}
+                {removeState ? <div className={cStyle.removeOverlay} onClick={removeCardWithKey}>CLICK TO REMOVE</div> : <span></span>}
             </div>
         
         </div>
