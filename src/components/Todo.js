@@ -44,7 +44,7 @@ function Todo() {
 
     const updateLocal = () =>
     {
-        console.log("check when here")
+
         localStorage.setItem("savedCards", JSON.stringify(cards));
         localStorage.setItem("saveAction", saveList);
         localStorage.setItem("cardKey", key);
@@ -197,10 +197,7 @@ function Todo() {
         let tempCards = Object.assign({}, cards);
         
         tempCards[cardKey].todoList[todoItemKey] = message;
-        console.log("what is the cardKey: ", cardKey)
-        console.log("what is cards[cardKey]: ", cards[cardKey])
-        console.log("what is tempCards[cardKey].todoList[todoItemKey]: ", tempCards[cardKey].todoList[todoItemKey])
-        console.log("what is in cards: ", cards);
+        
         setCards(prev => prev = tempCards);
         
        
@@ -214,23 +211,6 @@ function Todo() {
     }, [cards])
 
 
-
-    useEffect(() => 
-    {
-
-        console.log("checkSaveAction? " , checkSaveAction)
-        if (!checkSaveAction) {
-            localStorage.setItem("savedCards", JSON.stringify(cards));
-            localStorage.setItem("cardKey", key);
-        }
-     
-        localStorage.setItem("saveAction", saveList);
-
-        
-        
-    }, []);
-
-    
 
 
     return (
