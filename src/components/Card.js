@@ -21,8 +21,8 @@ function Card(props) {
  
     
     const removeCardID = useRef(null);
-    const cardRef = useRef(null);
 
+    
     
     
    
@@ -89,7 +89,6 @@ function Card(props) {
                 <input type="text" 
                        placeholder="Enter a name..." 
                        value={card.name} 
-                       ref={cardRef}
                        className={cStyle.titleInput}
                        onChange={(e) => updateCardNameWithTarget(e)}
                        />
