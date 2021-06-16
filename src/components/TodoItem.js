@@ -18,8 +18,8 @@ import tStyle from './style/TodoItem.module.css';
 function Card(props) {
     
     const {todoItemKey, deleteTodoItem, updateTodoItemMessage, todo, card} = props;
-    const todoItemRef = useRef(null);
 
+    
     
     
     
@@ -30,9 +30,9 @@ function Card(props) {
 
     }
 
-    const updateMessage = () =>
+    const updateMessage = (e) =>
     {        
-        updateTodoItemMessage(todoItemKey, todoItemRef.current.value);
+        updateTodoItemMessage(todoItemKey, e.target.value);
 
     }
     
@@ -45,9 +45,8 @@ function Card(props) {
             <input type="text" 
                    placeholder="what to do... " 
                    value={todo} 
-                   ref={todoItemRef}
                    className={tStyle.messageInput}
-                   onChange={updateMessage}
+                   onChange={(e) => updateMessage(e)}
                    />
             
             <div className={tStyle.deleteContainer} onClick={deleteCurrent}>✘</div>
