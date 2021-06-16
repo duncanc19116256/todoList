@@ -40,10 +40,10 @@ function Card(props) {
 
  
 
-    const updateCardNameWithTarget = () => 
+    const updateCardNameWithTarget = (e) => 
     {
 
-        updateCardName(cardKey, cardRef.current.value)
+        updateCardName(cardKey, e.target.value)
     }
 
     const removeCardWithKey = () => 
@@ -91,7 +91,7 @@ function Card(props) {
                        value={card.name} 
                        ref={cardRef}
                        className={cStyle.titleInput}
-                       onChange={updateCardNameWithTarget}
+                       onChange={(e) => updateCardNameWithTarget(e)}
                        />
                 <div className={cStyle.addTodo} onClick={() => {addTodo();}}>＋</div>
             </div>
