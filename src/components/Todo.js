@@ -13,13 +13,15 @@ import {useState, useEffect } from 'react';
 import Card from '../components/Card.js'
 import tStyle from './style/Todo.module.css';
 
-
+let cardsDefault = new Object();
+console.log("when is this called? "); 
+const checkSaveAction = localStorage.getItem("saveAction") === "true";
 
 function Todo() {
 
 
     
-    var cardsDefault = new Object();
+    // var cardsDefault = new Object();
     cardsDefault = {
         0: {
             name: "",
@@ -31,11 +33,7 @@ function Todo() {
         
     };
 
-
-    
-    const checkSaveAction = localStorage.getItem("saveAction") === "true";
-
-    const [cards, setCards] = useState(checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
+    const [cards, setCards] = useState(() => checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
     const [key, setKey] = useState(checkSaveAction ? parseInt(localStorage.getItem("cardKey")) : 1);                      // cardKey
     const [removeState, setRemoveState] = useState(false);
 
@@ -64,16 +62,18 @@ function Todo() {
     */
     const addCard = async() => 
     {
-
+        console.log("addCard called");
         setRemoveState(false);
         
-        let tempCard = Object.assign({}, cards);
-        tempCard[key] = Object.assign({}, cardsDefault[0]);
-        
+        // let tempCard = Object.assign({}, cards);
+        let tempCards = { ...cards };
+        // tempCard[key] = Object.assign({}, cardsDefault[0]);
+        tempCards[key] = { ...cardsDefault[0]}
+
         /*  increment key by 1 */
         setKey(prev => prev + 1);
 
-        setCards(prev => prev = tempCard);
+        setCards(tempCards);
      
         
 
@@ -90,11 +90,11 @@ function Todo() {
     const removeCard = (cardKey) => 
     { 
         /* Ensures only delete card when removeState is on */
-        let tempCards = Object.assign({}, cards);
+        let tempCards = { ...cards };
            
         delete tempCards[cardKey];
 
-        setCards(prev => prev = tempCards);
+        setCards(tempCards);
             
 
         
@@ -110,10 +110,10 @@ function Todo() {
     */
     const updateCardName = (cardKey, cardName) => 
     {
-        let tempCards = Object.assign({}, cards);
+        let tempCards = { ...cards };
 
         tempCards[cardKey].name = cardName;
-        setCards(prev => prev = tempCards);
+        setCards(tempCards);
 
         
 
@@ -133,7 +133,7 @@ function Todo() {
     const addTodoItem = (cardKey) => 
     {
         
-        let tempCards = Object.assign({}, cards);
+        let tempCards = { ...cards };
 
         /*  Adds new todoItem to the card */
         tempCards[cardKey].todoList = {
@@ -144,7 +144,7 @@ function Todo() {
         /* This increments the todoListKey by 1 to ensure adding todoItem is 
            added correctly each time */
         tempCards[cardKey].todoListKey++;
-        setCards(prev => prev = tempCards);
+        setCards(tempCards);
 
      
 
@@ -169,13 +169,11 @@ function Todo() {
 
         /*  Only deletes the todoItem if the card has todoItemList > 1 */
         if (Object.keys(cards[cardKey].todoList).length > 1) {
-            let tempCards = Object.assign({}, cards);
-
+            let tempCards = { ...cards };
             
             delete tempCards[cardKey].todoList[todoItemKey];
 
-            
-            setCards(prev => prev = tempCards);
+            setCards(tempCards);
 
 
         }
@@ -194,11 +192,10 @@ function Todo() {
     */
     const updateTodoItemMessage = (cardKey, todoItemKey, message) => 
     {
-        let tempCards = Object.assign({}, cards);
+        let tempCards = { ...cards };
         
         tempCards[cardKey].todoList[todoItemKey] = message;
-        
-        setCards(prev => prev = tempCards);
+        setCards(tempCards);
         
        
     }

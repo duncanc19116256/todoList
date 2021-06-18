@@ -7,27 +7,18 @@
  */
 
 
-import { useRef } from 'react';
-
-
-
 
 import tStyle from './style/TodoItem.module.css';
 
 
 function Card(props) {
     
-    const {todoItemKey, deleteTodoItem, updateTodoItemMessage, todo, card} = props;
+    const {todoItemKey, deleteTodoItem, updateTodoItemMessage, todo} = props;
 
-    
-    
-    
     
     const deleteCurrent = () => 
     {
         deleteTodoItem(todoItemKey);
-
-
     }
 
     const updateMessage = (e) =>
@@ -35,8 +26,6 @@ function Card(props) {
         updateTodoItemMessage(todoItemKey, e.target.value);
 
     }
-    
-   
 
 
 

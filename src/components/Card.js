@@ -6,10 +6,6 @@
  * 
  */
 
-
-import { useRef } from 'react';
-
-
 import TodoItem from '../components/TodoItem.js'
 
 
@@ -18,14 +14,6 @@ import cStyle from './style/Card.module.css';
 
 function Card(props) {
     const {cardKey, card, addTodoItem, deleteTodoItem, removeCard, updateTodoItemMessage, updateCardName, removeState} = props;
- 
-    
-    const removeCardID = useRef(null);
-
-    
-    
-    
-   
     
 
     /*  addTodo()
@@ -78,8 +66,7 @@ function Card(props) {
 
     }
 
-  
-    
+
 
 
     return (
@@ -116,7 +103,7 @@ function Card(props) {
                 
                 
             </div>
-            <div  ref={removeCardID} className={cStyle.removeOverlayContainer}>
+            <div  className={cStyle.removeOverlayContainer}>
                 {removeState ? <div className={cStyle.removeOverlay} onClick={removeCardWithKey}>CLICK TO REMOVE</div> : <span></span>}
             </div>
         
