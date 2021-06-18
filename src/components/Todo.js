@@ -65,10 +65,10 @@ function Todo() {
         console.log("addCard called");
         setRemoveState(false);
         
-        // let tempCard = Object.assign({}, cards);
+
         let tempCards = { ...cards };
-        // tempCard[key] = Object.assign({}, cardsDefault[0]);
-        tempCards[key] = { ...cardsDefault[0]}
+
+        tempCards[key] = JSON.parse(JSON.stringify(cardsDefault[0]));
 
         /*  increment key by 1 */
         setKey(prev => prev + 1);
