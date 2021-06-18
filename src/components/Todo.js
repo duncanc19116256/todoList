@@ -13,27 +13,20 @@ import {useState, useEffect } from 'react';
 import Card from '../components/Card.js'
 import tStyle from './style/Todo.module.css';
 
-let cardsDefault = new Object();
-console.log("when is this called? "); 
+const cardsDefault = [{
+    name: "",
+    todoList: [{message: "", todoItemKey: 0}],
+    todoItemKeyTrack: 1,
+    cardKey: 0,
+}];
 const checkSaveAction = localStorage.getItem("saveAction") === "true";
+
 
 function Todo() {
 
 
-    
-    // var cardsDefault = new Object();
-    cardsDefault = {
-        0: {
-            name: "",
-            todoList: {
-                0: "",
-            },
-            todoListKey: 1,
-        }, 
-        
-    };
-
-    const [cards, setCards] = useState(() => checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
+    console.log("cardsDefault: ", cardsDefault)
+    const [cards, setCards] = useState(checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
     const [key, setKey] = useState(checkSaveAction ? parseInt(localStorage.getItem("cardKey")) : 1);                      // cardKey
     const [removeState, setRemoveState] = useState(false);
 
@@ -46,7 +39,8 @@ function Todo() {
         localStorage.setItem("savedCards", JSON.stringify(cards));
         localStorage.setItem("saveAction", saveList);
         localStorage.setItem("cardKey", key);
-  
+
+        
             
     }
 
@@ -60,22 +54,22 @@ function Todo() {
                     state.
         Parameters: none
     */
-    const addCard = async() => 
+    const addCard = () => 
     {
-        console.log("addCard called");
+
         setRemoveState(false);
+        var temp = {
+            name: "",
+            todoList: [{message: "", todoItemKey: 0}],
+            todoItemKeyTrack: 1,
+            cardKey: key,
+        }
+        setCards(prevArr => prevArr.concat(temp));
         
-
-        let tempCards = { ...cards };
-
-        tempCards[key] = JSON.parse(JSON.stringify(cardsDefault[0]));
-
+        
         /*  increment key by 1 */
         setKey(prev => prev + 1);
 
-        setCards(tempCards);
-     
-        
 
     }
 
@@ -89,13 +83,8 @@ function Todo() {
     */
     const removeCard = (cardKey) => 
     { 
-        /* Ensures only delete card when removeState is on */
-        let tempCards = { ...cards };
-           
-        delete tempCards[cardKey];
 
-        setCards(tempCards);
-            
+        setCards(prev => prev.filter(eachCard => eachCard.cardKey !== cardKey));
 
         
 
@@ -110,13 +99,11 @@ function Todo() {
     */
     const updateCardName = (cardKey, cardName) => 
     {
-        let tempCards = { ...cards };
 
-        tempCards[cardKey].name = cardName;
-        setCards(tempCards);
-
-        
-
+        setCards(prevArr => prevArr.map(eachCard => 
+                                            eachCard.cardKey === cardKey ? 
+                                                {... eachCard, name: cardName}:
+                                                {... eachCard}));
 
     }
 
@@ -133,19 +120,17 @@ function Todo() {
     const addTodoItem = (cardKey) => 
     {
         
-        let tempCards = { ...cards };
-
-        /*  Adds new todoItem to the card */
-        tempCards[cardKey].todoList = {
-            ...tempCards[cardKey].todoList,
-            [tempCards[cardKey].todoListKey] : "",
-        }
+        setCards(prevArr => prevArr.map(function(eachCard) {
+            if (eachCard.cardKey == cardKey) {
+                var tempTodoItem = {message: "", todoItemKey: eachCard.todoItemKeyTrack};
+                var temp = {...eachCard};
+                temp.todoItemKeyTrack++;
+                temp.todoList = [...temp.todoList, tempTodoItem];
+                return temp;
+            }
+            return eachCard;
+        }))
         
-        /* This increments the todoListKey by 1 to ensure adding todoItem is 
-           added correctly each time */
-        tempCards[cardKey].todoListKey++;
-        setCards(tempCards);
-
      
 
     }
@@ -164,21 +149,20 @@ function Todo() {
                     int todoItemKey - the identifier to the todoItem that will
                                       be deleted 
     */
-    const deleteTodoItem = async (cardKey, todoItemKey) => 
+    const deleteTodoItem = (cardKey, todoItemKey) => 
     {
 
-        /*  Only deletes the todoItem if the card has todoItemList > 1 */
-        if (Object.keys(cards[cardKey].todoList).length > 1) {
-            let tempCards = { ...cards };
-            
-            delete tempCards[cardKey].todoList[todoItemKey];
+        setCards(prevArr => prevArr.map(function(eachCard) {
+            if (eachCard.cardKey === cardKey) {
+                eachCard.todoList = eachCard.todoList.filter(todoItem => todoItem.todoItemKey != todoItemKey);
+            }
+            return eachCard;
+        }))
 
-            setCards(tempCards);
 
 
-        }
-        
     }
+
     /*  updateTodoItemMessage()
         Purpose:    to update todoItem Message onChange
         Effect:     Creates a copy of cards Object to change the todoItem of at 
@@ -192,10 +176,18 @@ function Todo() {
     */
     const updateTodoItemMessage = (cardKey, todoItemKey, message) => 
     {
-        let tempCards = { ...cards };
-        
-        tempCards[cardKey].todoList[todoItemKey] = message;
-        setCards(tempCards);
+
+        setCards(prevArr => prevArr.map(function(eachCard) {
+            if (eachCard.cardKey === cardKey) {
+
+                eachCard.todoList.map(function(eachTodoItem, todoItemIdx) {
+                    if (eachTodoItem.todoItemKey === todoItemKey) {
+                        eachCard.todoList[todoItemIdx].message = message;
+                    }
+                })
+            }
+            return eachCard;
+        }))
         
        
     }
@@ -205,6 +197,7 @@ function Todo() {
     useEffect(() =>
     {
         updateLocal()
+
     }, [cards])
 
 
@@ -231,24 +224,25 @@ function Todo() {
             </div>
 
             <div className={tStyle.cardsContainer}> 
-            
-                {
+                { 
+                    cards &&
                     
-                    Object.keys(cards).map((cardKey, index) => {
+                    cards.map((card) => {
                         return (
                             <Card removeCard = {removeCard}
                                   removeState = {removeState} 
                                   cards={cards}
-                                  card = {cards[cardKey]}
-                                  cardKey = {cardKey}
+                                  card = {card}
+                                  cardKey = {card.cardKey}
                                   addTodoItem={addTodoItem}
-                                  key={index}
+                                  key={card.cardKey}
                                   deleteTodoItem={deleteTodoItem}
                                   updateTodoItemMessage={updateTodoItemMessage}
                                   updateCardName={updateCardName}>
                                     
                             </Card>
                         )
+                        console.log("card from cards", card)
                     })
                 }
              

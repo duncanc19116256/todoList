@@ -86,14 +86,15 @@ function Card(props) {
             <div className={cStyle.scrollableContainer}> 
                 
                 {
-                    Object.keys(card.todoList).map((todoItemKey, index) => {
+                    card.todoList &&
+                    card.todoList.map((todoItem) => {
 
                         return (
 
-                            <TodoItem todo={card.todoList[todoItemKey]}
+                            <TodoItem todo={todoItem.message}
                                       card={card}
-                                      todoItemKey = {todoItemKey}
-                                      key = {index}
+                                      todoItemKey = {todoItem.todoItemKey}
+                                      key = {todoItem.todoItemKey}
                                       deleteTodoItem={deleteTodoItemWithKey}
                                       updateTodoItemMessage={updateTodoItemMessageWithKey}>
                                       </TodoItem>
