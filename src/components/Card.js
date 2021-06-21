@@ -92,6 +92,7 @@ function Card(props) {
                         return (
 
                             <TodoItem todo={todoItem.message}
+                                    //    REVIEW: 這個 card 沒有用到
                                       card={card}
                                       todoItemKey = {todoItem.todoItemKey}
                                       key = {todoItem.todoItemKey}
