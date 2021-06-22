@@ -1,99 +1,87 @@
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
-.cardContainer{
+  border: 2px #666668 solid;
+  border-radius: 5px;
+  height: 250px;
+  width: 250px;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+  padding: 20px 10px;
+  margin: 5px 10px;
 
-    border: 2px #666668 solid;
-    border-radius: 5px;
-    height: 250px;
-    width: 250px;
-
-    padding: 20px 10px;
-    margin: 5px 10px;
-    
-    box-shadow: 5px 5px 5px #c2e5d7;
-    background-color: #ffffff;
+  box-shadow: 5px 5px 5px #c2e5d7;
+  background-color: #ffffff;
 }
 
+.cardRemoveContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 
-.cardRemoveContainer{
+  border: 2px #eb4034 solid;
+  border-radius: 5px;
+  height: 250px;
+  width: 250px;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-
-    border: 2px #eb4034 solid;
-    border-radius: 5px;
-    height: 250px;
-    width: 250px;
-
-    padding: 20px 10px;
-    margin: 5px 10px;    
-
+  padding: 20px 10px;
+  margin: 5px 10px;
 }
 
 .titleContainer {
-    position: relative;
+  position: relative;
 
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .titleInput {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    width: 100%;
-    font-size: 20px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  font-size: 20px;
 }
 
 .addTodo {
-    font-size: 25px;
-    color: #666668;
-    cursor: pointer;
-
+  font-size: 25px;
+  color: #666668;
+  cursor: pointer;
 }
 
 .scrollableContainer {
-    position: relative;
+  position: relative;
 
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow: scroll;
-    width: 100%;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+  width: 100%;
 }
 
 .removeOverlayContainer {
-    position: absolute;
+  position: absolute;
 
-    transform: translate(-7%, -9%);
-
+  transform: translate(-7%, -9%);
 }
 
 .removeOverlay {
+  background-color: #eb4034;
+  opacity: 0.5;
+  border: 2px #eb4034 solid;
 
-    background-color: #eb4034;
-    opacity: 0.5;
-    border: 2px #eb4034 solid;
+  border-radius: 5px;
+  padding: 20px 10px;
+  margin: 5px 10px;
 
-    border-radius: 5px;
-    padding: 20px 10px;
-    margin: 5px 10px;
-
-    height: 250px;
-    width: 250px;
-    color: #ffffff;
-    font-weight: bold;
-    font-size: 50px;
-    text-align: center;
-
-
-
+  height: 250px;
+  width: 250px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 50px;
+  text-align: center;
 }

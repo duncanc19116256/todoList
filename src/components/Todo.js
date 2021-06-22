@@ -17,20 +17,23 @@ import tStyle from "./style/Todo.module.css";
  * 想像極端點，例如： default value 若擁有 20 個 props，
  * 則 addCard assign temp 時就不需重寫這些 props
  */
-const cardsDefault = [
-  {
-    name: "",
-    todoList: [{ message: "", todoItemKey: 0 }],
-    todoItemKeyTrack: 1,
-    cardKey: 0
-  }
-];
+const cardsDefault = {
+  name: "",
+  todoList: [{ message: "", todoItemKey: 0 }],
+  todoItemKeyTrack: 1,
+  cardKey: 0,
+};
 const checkSaveAction = localStorage.getItem("saveAction") === "true";
 
 function Todo() {
-  console.log("cardsDefault: ", cardsDefault);
-  const [cards, setCards] = useState(checkSaveAction ? JSON.parse(localStorage.getItem("savedCards")) : cardsDefault);
-  const [key, setKey] = useState(checkSaveAction ? parseInt(localStorage.getItem("cardKey")) : 1); // cardKey
+  const [cards, setCards] = useState(
+    checkSaveAction
+      ? JSON.parse(localStorage.getItem("savedCards"))
+      : [cardsDefault]
+  );
+  const [key, setKey] = useState(
+    checkSaveAction ? parseInt(localStorage.getItem("cardKey")) : 1
+  ); // cardKey
   const [removeState, setRemoveState] = useState(false);
 
   const [saveList, setSaveList] = useState(true);
@@ -57,16 +60,16 @@ function Todo() {
     /** REVIEW: 此處建議 spread `cardsDefault` 的預設結構，再另外寫 cardKey Prod 。
      *  const temp = {...cardsDefault, cardKey: key, }
      */
-    var temp = {
-      name: "",
-      todoList: [{ message: "", todoItemKey: 0 }],
-      todoItemKeyTrack: 1,
-      cardKey: key
-    };
-    setCards(prevArr => prevArr.concat(temp));
+    setCards((prevArr) => [
+      ...prevArr,
+      {
+        ...cardsDefault,
+        cardKey: key,
+      },
+    ]);
 
     /*  increment key by 1 */
-    setKey(prev => prev + 1);
+    setKey((prev) => prev + 1);
   };
 
   /*  removeCard()
@@ -76,8 +79,8 @@ function Todo() {
                     Then updates the state of cards. 
         Parameters: int cardKey - key to the card to be removed 
     */
-  const removeCard = cardKey => {
-    setCards(prev => prev.filter(eachCard => eachCard.cardKey !== cardKey));
+  const removeCard = (cardKey) => {
+    setCards((prev) => prev.filter((eachCard) => eachCard.cardKey !== cardKey));
   };
 
   /*  updateCardName()
@@ -88,8 +91,12 @@ function Todo() {
                     string cardName  - the name to be saved
     */
   const updateCardName = (cardKey, cardName) => {
-    setCards(prevArr =>
-      prevArr.map(eachCard => (eachCard.cardKey === cardKey ? { ...eachCard, name: cardName } : { ...eachCard }))
+    setCards((prevArr) =>
+      prevArr.map((eachCard) =>
+        eachCard.cardKey === cardKey
+          ? { ...eachCard, name: cardName }
+          : { ...eachCard }
+      )
     );
   };
 
@@ -102,37 +109,31 @@ function Todo() {
         Parameters: int cardKey  - the identifier to the card that needs 
                                       needs to be altered
     */
-  const addTodoItem = cardKey => {
-    setCards(prevArr =>
-      prevArr.map(function(eachCard) {
-          // REVIEW: 使用 === 
-          // REVIEW: 使用 const or let 取代 var
-        /**
-           * REVIEW: 我認為寫成這樣，比較簡短好讀，但這有點因人而異
-           * return ? eachCard.cardKey === cardKey? 
-           * {
-           *    ...eachCard,
-           *    todoItemKeyTrack: eachCard.todoItemKeyTrack + 1,
-           *    todoList:  [
-           *        ...temp.todoList, 
-           *        { 
-           *            message: "",
-           *            todoItemKey: eachCard.todoItemKeyTrack 
-           *        }
-           *    ];
-           * } 
-           * : 
-           * eachCard;
-           */
-        if (eachCard.cardKey == cardKey) {
-          var tempTodoItem = { message: "", todoItemKey: eachCard.todoItemKeyTrack };
-        
-          var temp = { ...eachCard };
-          temp.todoItemKeyTrack++;
-          temp.todoList = [...temp.todoList, tempTodoItem];
-          return temp;
-        }
-        return eachCard;
+  const addTodoItem = (cardKey) => {
+    setCards((prevArr) =>
+      prevArr.map((eachCard) => {
+        return eachCard.cardKey === cardKey
+          ? {
+              ...eachCard,
+              todoItemKeyTrack: eachCard.todoItemKeyTrack + 1,
+              todoList: [
+                ...eachCard.todoList,
+                {
+                  message: "",
+                  todoItemKey: eachCard.todoItemKeyTrack,
+                },
+              ],
+            }
+          : eachCard;
+        // if (eachCard.cardKey === cardKey) {
+        //   let tempTodoItem = { message: "", todoItemKey: eachCard.todoItemKeyTrack };
+
+        //   let temp = { ...eachCard };
+        //   temp.todoItemKeyTrack++;
+        //   temp.todoList = [...temp.todoList, tempTodoItem];
+        //   return temp;
+        // }
+        // return eachCard;
       })
     );
   };
@@ -150,10 +151,12 @@ function Todo() {
                                       be deleted 
     */
   const deleteTodoItem = (cardKey, todoItemKey) => {
-    setCards(prevArr =>
-      prevArr.map(function(eachCard) {
+    setCards((prevArr) =>
+      prevArr.map((eachCard) => {
         if (eachCard.cardKey === cardKey) {
-          eachCard.todoList = eachCard.todoList.filter(todoItem => todoItem.todoItemKey != todoItemKey);
+          eachCard.todoList = eachCard.todoList.filter(
+            (todoItem) => todoItem.todoItemKey != todoItemKey
+          );
         }
         return eachCard;
       })
@@ -172,40 +175,42 @@ function Todo() {
                     string message  - the message that needs to be saved
     */
   const updateTodoItemMessage = (cardKey, todoItemKey, message) => {
-   
-    setCards(prevArr =>
-      prevArr.map(function(eachCard) {
-        if (eachCard.cardKey === cardKey) {
-          // REVIEW todoItemIdx 是不是 todoItemId
-          eachCard.todoList.map(function(eachTodoItem, todoItemIdx) {
-
-             /** REVIEW 
-            *  可以參考這種寫法，盡量避免直接 assign 的行為(mutable)
-            * (`eachCard.todoList[todoItemIdx].message = message;`)
-            * 避免副作用
-             * return eachTodoItem.todoItemKey === todoItemKey ? 
-             * { ...eachTodoItem, message } : eachTodoItem; 
-             * 
-             * ref https://www.freecodecamp.org/news/handling-state-in-react-four-immutable-approaches-to-consider-d1f5c00249d5/
-             */
-            if (eachTodoItem.todoItemKey === todoItemKey) {
-              eachCard.todoList[todoItemIdx].message = message;
+    setCards((prevArr) =>
+      prevArr.map((eachCard) => {
+        return eachCard.cardKey === cardKey
+          ? {
+              ...eachCard,
+              todoList: eachCard.todoList.map((eachTodoItem) => {
+                return eachTodoItem.todoItemKey === todoItemKey
+                  ? {
+                      ...eachTodoItem,
+                      message: message,
+                    }
+                  : eachTodoItem;
+              }),
             }
-          
-          });
-        }
-        return eachCard;
+          : eachCard;
       })
     );
   };
 
   /*  acts like a callback function to setCards */
-  useEffect(
-    () => {
-      updateLocal();
-    },
-    [cards]
-  );
+  useEffect(() => {
+    updateLocal();
+    console.log("useEffect cards: ", cards);
+  }, [cards]);
+
+  useEffect(() => {
+    const handleSpacePress = () => {
+      removeState && setRemoveState((prev) => !prev);
+    };
+
+    document.addEventListener("keydown", handleSpacePress);
+
+    return () => {
+      document.removeEventListener("keydown", handleSpacePress);
+    };
+  }, []);
 
   return (
     <div className={tStyle.todoContainer}>
@@ -217,7 +222,10 @@ function Todo() {
           {/* REVIEW ：覺得這裡刪除的 UI 做得蠻有趣蠻棒的，
                     若是我，會加入按空白處可以取消 remove state 的機制
                     */}
-          <button className={tStyle.removeEvent} onClick={() => setRemoveState(prev => !prev)}>
+          <button
+            className={tStyle.removeEvent}
+            onClick={() => setRemoveState((prev) => !prev)}
+          >
             －
           </button>
         </div>
@@ -230,7 +238,7 @@ function Todo() {
             checked={saveList}
             onChange={() => {
               localStorage.setItem("saveAction", !saveList);
-              setSaveList(prev => !prev);
+              setSaveList((prev) => !prev);
             }}
           />
           Auto Save
@@ -238,17 +246,16 @@ function Todo() {
       </div>
 
       <div className={tStyle.cardsContainer}>
-        {// REVIEW: key word: optional chain
-        // 可簡化為 cards?.map((card))
-        // REVIEW [] && 'a' 會返回 'a'，這裏的 cards && ... 前面的判斷式會永遠是 true
-        cards &&
-          cards.map(card => {
+        {
+          // REVIEW: key word: optional chain
+          // 可簡化為 cards?.map((card))
+          // REVIEW [] && 'a' 會返回 'a'，這裏的 cards && ... 前面的判斷式會永遠是 true
+          cards.map((card) => {
             return (
               <Card
+                addCard={addCard}
                 removeCard={removeCard}
                 removeState={removeState}
-                //    REVIEW: 這個 cards 沒有用到
-                cards={cards}
                 card={card}
                 cardKey={card.cardKey}
                 addTodoItem={addTodoItem}
@@ -258,8 +265,8 @@ function Todo() {
                 updateCardName={updateCardName}
               />
             );
-            console.log("card from cards", card);
-          })}
+          })
+        }
       </div>
     </div>
   );
@@ -272,7 +279,7 @@ export default Todo;
  * 1. 有些地方使用了 arrow function，有些則使用 function(){}，
  *    建議語法統一，可了解其差別
  * 2. 團隊合作會使用一些工具維持一致的 coding style，
- *    可練習安裝 es lint & prettier ，配合 editor 的 format 功能 
+ *    可練習安裝 es lint & prettier ，配合 editor 的 format 功能
  * 3. todo item 可練習以“Enter”加入新的一行
- * 
+ *
  */

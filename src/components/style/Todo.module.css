@@ -1,82 +1,68 @@
-
 .todoContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    /* background-color: #c2e5d7; */
-    width: 100%;
-
-
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* background-color: #c2e5d7; */
+  width: 100%;
 }
 
 .editsContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding-left: 30px;
-    padding-right: 30px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 30px;
+  padding-right: 30px;
 
-    
-    border-top: #666668 2px solid;
-
+  border-top: #666668 2px solid;
 }
 
 button {
-    height: 30px;
-    width: 30px;
-    margin-top: 10px;
-    margin-left: 5px;
+  height: 30px;
+  width: 30px;
+  margin-top: 10px;
+  margin-left: 5px;
 
-    border: none;
-    border-radius: 5px;;
+  border: none;
+  border-radius: 5px;
 
-    font-weight: bolder;
-    font-size: 20px;
-    color: #ffffff;
+  font-weight: bolder;
+  font-size: 20px;
+  color: #ffffff;
 
-    cursor: pointer;
-
+  cursor: pointer;
 }
 
-
-
 .saveListContainer {
-    color: #666668;
-
+  color: #666668;
 }
 
 .saveCheckbox {
-    border: #666668 solid 1px;
-    background:#666668;
+  border: #666668 solid 1px;
+  background: #666668;
+  cursor: pointer;
 }
 .saveCheckbox:hover {
-    background: #666668;
+  background: #666668;
 }
 
 :checked {
-    background: #4dc4ec;
-    border: 1px solid #4dc4ec;
-
+  background: #4dc4ec;
+  border: 1px solid #4dc4ec;
 }
 
-
-
-
 .addEvent {
-    background-color: #4dc4ec;
+  background-color: #4dc4ec;
 }
 
 .removeEvent {
-    background-color: #9ecd49;
+  background-color: #9ecd49;
 }
 
-
-
 .cardsContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
