@@ -95,7 +95,8 @@ function Todo() {
       prevArr.map((eachCard) =>
         eachCard.cardKey === cardKey
           ? { ...eachCard, name: cardName }
-          : { ...eachCard }
+          : eachCard
+          // REVIEW2: 若沒必要，就不要再 spread ㄧ次，每次 spread 就是一次 loop
       )
     );
   };
@@ -152,14 +153,14 @@ function Todo() {
     */
   const deleteTodoItem = (cardKey, todoItemKey) => {
     setCards((prevArr) =>
-      prevArr.map((eachCard) => {
-        if (eachCard.cardKey === cardKey) {
-          eachCard.todoList = eachCard.todoList.filter(
+      prevArr.map((eachCard) => 
+     eachCard.cardKey === cardKey?
+     //REVIEW2: 這邊也是像上次 REVIEW 所寫避免直接 assign 
+          {...eachCard,todoList:eachCard.todoList.filter(
             (todoItem) => todoItem.todoItemKey != todoItemKey
-          );
-        }
-        return eachCard;
-      })
+          )}
+      :eachCard
+      )
     );
   };
 
@@ -184,7 +185,7 @@ function Todo() {
                 return eachTodoItem.todoItemKey === todoItemKey
                   ? {
                       ...eachTodoItem,
-                      message: message,
+                      message,
                     }
                   : eachTodoItem;
               }),
@@ -201,8 +202,24 @@ function Todo() {
   }, [cards]);
 
   useEffect(() => {
+    /* REVIEW2: 你這個 useEffect 裡面的 code 有下列問題存在
+        1. 這邊監聽 'keydown' 是去監聽 keyboard event，Ting 的 review 看起來意思應該是：
+           在 remove state 的時候，若用滑鼠點擊畫面上的空白處可以取消 remove state
+        2. 不知道你是不是要做成按 space bar 就會取消 remove state ，如果這邊真的要做成 space bar 的效果的話
+           在 addEventListener 的 handler (第二個參數) 裡面會提供一個參數可以拿到 event key code，
+           你可以查一下 space bar 的 key code 來實作這樣的效果
+        3. 在 handleSpacePress 這個 handler 裡面的 removeState 因為 closure 的關係所以會永遠是最一開始傳進去的值，
+           所以理論上會一直都是 false，所以將永遠不會執行 setRemoveState，只有在 initial 時當 removeState 是 true 才有可能有效
+           我建議最簡單的方式就是這樣就好
+            const handleSpacePress = () => {
+              setRemoveState(false));
+              };
+        4. 如果要做成 space bar 的功能，可能要注意一下在使用者操作的時候，目前使用者在網頁 focus 的位置，
+           因為 space bar 在瀏覽器有預設像 enter 的行為，建議還是做 Ting 說的點空白處取消，
+           或是非要用 keyboard 操縱的話，改用 esc 或其他 key
+    */
     const handleSpacePress = () => {
-      removeState && setRemoveState((prev) => !prev);
+      setRemoveState(false)
     };
 
     document.addEventListener("keydown", handleSpacePress);
@@ -257,7 +274,7 @@ function Todo() {
                 removeCard={removeCard}
                 removeState={removeState}
                 card={card}
-                cardKey={card.cardKey}
+                // REVIEW2: 這邊已經把 card 整包傳下去了，Card 已經可以取得 cardKey 所以沒必要再另外把 cardKey 傳下去
                 addTodoItem={addTodoItem}
                 key={card.cardKey}
                 deleteTodoItem={deleteTodoItem}

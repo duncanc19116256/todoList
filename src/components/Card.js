@@ -12,7 +12,6 @@ import cStyle from "./style/Card.module.css";
 
 function Card(props) {
   const {
-    cardKey,
     card,
     addTodoItem,
     deleteTodoItem,
@@ -23,6 +22,8 @@ function Card(props) {
     removeState,
   } = props;
 
+  //REMOTE2: 上一層不傳cardKey，改為從 card 裡面取出 cardKey 使用
+  const {cardKey} = card
   /*  addTodo()
         Purpose:    calls addTodoItem and pass in cardKey
         Effect:     Calls props function addTodoItem and pass in CardID
@@ -89,27 +90,28 @@ function Card(props) {
           placeholder="Enter a name..."
           value={card.name}
           className={cStyle.titleInput}
-          onChange={(e) => updateCardNameWithTarget(e)}
-          onKeyDown={(e) => handleKeyDown(e)}
+          //REVIEW2: 可以這樣寫就好，參數可以不用再特別寫一次
+          onChange={updateCardNameWithTarget}
+          onKeyDown={handleKeyDown}
         />
         <div
           className={cStyle.addTodo}
-          onClick={() => {
-            addTodo();
-          }}
+          onClick={addTodo}
         >
           ＋
         </div>
       </div>
 
       <div className={cStyle.scrollableContainer}>
-        {card.todoList &&
-          card.todoList.map((todoItem) => {
+        {
+          // REVIEW2: reference - Optional chaining
+          card.todoList?.map(({message,todoItemKey}) => {
+            //REVIEW2: reference - Destructuring assignment
             return (
               <TodoItem
-                todo={todoItem.message}
-                todoItemKey={todoItem.todoItemKey}
-                key={todoItem.todoItemKey}
+                todo={message}
+                todoItemKey={todoItemKey}
+                key={todoItemKey}
                 deleteTodoItem={deleteTodoItemWithKey}
                 updateTodoItemMessage={updateTodoItemMessageWithKey}
                 addTodo={addTodo}
@@ -118,13 +120,12 @@ function Card(props) {
           })}
       </div>
       <div className={cStyle.removeOverlayContainer}>
-        {removeState ? (
+        {//REVIEW2: 這邊可以這樣寫，就不需要 return 一個空 <span />
+        removeState && (
           <div className={cStyle.removeOverlay} onClick={removeCardWithKey}>
             CLICK TO REMOVE
           </div>
-        ) : (
-          <span></span>
-        )}
+        ) }
       </div>
     </div>
   );

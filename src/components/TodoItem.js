@@ -21,6 +21,10 @@ function Card(props) {
   };
 
   const handleKeyDown = (e) => {
+    /*REVIEW2: 這邊的 keyDown 操作就是對的！根據 event 給的 key/keyCode 來操作都可以～
+    有個小小瑕疵是既然做了 enter 可以新增一行的功能，但按完卻只有 blur，還是要用滑鼠操作點擊新的那行才可以輸入文字，
+    建議可以練習看把 focus 帶到新增的那一行
+    */
     if (e.key === "Enter") {
       addTodo();
       e.target.blur();
@@ -34,8 +38,8 @@ function Card(props) {
         placeholder="what to do... "
         value={todo}
         className={tStyle.messageInput}
-        onChange={(e) => updateMessage(e)}
-        onKeyDown={(e) => handleKeyDown(e)}
+        onChange={updateMessage}
+        onKeyDown={handleKeyDown}
       />
 
       <div className={tStyle.deleteContainer} onClick={deleteCurrent}>
