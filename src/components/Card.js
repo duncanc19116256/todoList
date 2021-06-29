@@ -5,12 +5,13 @@
  *
  *
  */
-
+import React from "react";
 import TodoItem from "../components/TodoItem.js";
-
+import { IconButton, TextField, Tooltip } from "@material-ui/core";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import cStyle from "./style/Card.module.css";
 
-function Card(props) {
+const Card = React.forwardRef((props, ref) => {
   const {
     card,
     addTodoItem,
@@ -23,7 +24,7 @@ function Card(props) {
   } = props;
 
   //REMOTE2: 上一層不傳cardKey，改為從 card 裡面取出 cardKey 使用
-  const {cardKey} = card
+  const { cardKey } = card;
   /*  addTodo()
         Purpose:    calls addTodoItem and pass in cardKey
         Effect:     Calls props function addTodoItem and pass in CardID
@@ -62,7 +63,6 @@ function Card(props) {
     */
   const updateTodoItemMessageWithKey = (todoItemKey, message) => {
     updateTodoItemMessage(cardKey, todoItemKey, message);
-    console.log("what is the cardKey: ", cardKey);
   };
 
   /*  handleKeyDown()
@@ -82,30 +82,32 @@ function Card(props) {
       className={
         removeState ? cStyle.cardRemoveContainer : cStyle.cardContainer
       }
-      /* onClick={async () => await props.removeCard(cardKey)} */
+      ref={ref}
     >
       <div className={cStyle.titleContainer}>
-        <input
-          type="text"
+        <TextField
           placeholder="Enter a name..."
-          value={card.name}
-          className={cStyle.titleInput}
-          //REVIEW2: 可以這樣寫就好，參數可以不用再特別寫一次
           onChange={updateCardNameWithTarget}
           onKeyDown={handleKeyDown}
+          value={card.name}
+          type="text"
+          variant="standard"
+          size="medium"
+          fullWidth
+          autoFocus
+          className={cStyle.titleInput}
         />
-        <div
-          className={cStyle.addTodo}
-          onClick={addTodo}
-        >
-          ＋
-        </div>
+        <Tooltip title="Add todoItem">
+          <IconButton className={cStyle.addTodo} onClick={addTodo}>
+            <PlaylistAddIcon fontSize="large" />
+          </IconButton>
+        </Tooltip>
       </div>
 
       <div className={cStyle.scrollableContainer}>
         {
           // REVIEW2: reference - Optional chaining
-          card.todoList?.map(({message,todoItemKey}) => {
+          card.todoList?.map(({ message, todoItemKey }) => {
             //REVIEW2: reference - Destructuring assignment
             return (
               <TodoItem
@@ -117,18 +119,22 @@ function Card(props) {
                 addTodo={addTodo}
               ></TodoItem>
             );
-          })}
+          })
+        }
       </div>
+
       <div className={cStyle.removeOverlayContainer}>
-        {//REVIEW2: 這邊可以這樣寫，就不需要 return 一個空 <span />
-        removeState && (
-          <div className={cStyle.removeOverlay} onClick={removeCardWithKey}>
-            CLICK TO REMOVE
-          </div>
-        ) }
+        {
+          //REVIEW2: 這邊可以這樣寫，就不需要 return 一個空 <span />
+          removeState && (
+            <div className={cStyle.removeOverlay} onClick={removeCardWithKey}>
+              CLICK TO REMOVE
+            </div>
+          )
+        }
       </div>
     </div>
   );
-}
+});
 
 export default Card;

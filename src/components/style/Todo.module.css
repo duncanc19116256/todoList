@@ -2,19 +2,21 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: #c2e5d7; */
+
   width: 100%;
 }
-
+.backgroundContainer {
+  height: 100vh;
+  background-color: rgba(194, 229, 215, 0.5);
+}
 .editsContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 10px 30px;
 
-  border-top: #666668 2px solid;
+  margin-bottom: 10px;
 }
 
 button {
@@ -24,7 +26,7 @@ button {
   margin-left: 5px;
 
   border: none;
-  border-radius: 5px;
+  border-radius: 1px;
 
   font-weight: bolder;
   font-size: 20px;
@@ -37,28 +39,31 @@ button {
   color: #666668;
 }
 
-.saveCheckbox {
-  border: #666668 solid 1px;
-  background: #666668;
-  cursor: pointer;
-}
-.saveCheckbox:hover {
-  background: #666668;
-}
-
-:checked {
-  background: #4dc4ec;
-  border: 1px solid #4dc4ec;
-}
-
 .addEvent {
   background-color: #4dc4ec;
+  color: #ffffff;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
+
+  border-radius: 3px;
 }
 
 .removeEvent {
   background-color: #9ecd49;
+  color: #ffffff;
+  margin-left: 0.5vw;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
+
+  border-radius: 3px;
 }
 
+.addEvent:hover {
+  background-color: #ffffff;
+  color: #4dc4ec;
+}
+.removeEvent:hover {
+  background-color: #ffffff;
+  color: #9ecd49;
+}
 .cardsContainer {
   display: flex;
   flex-direction: row;

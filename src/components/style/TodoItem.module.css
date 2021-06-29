@@ -9,7 +9,7 @@
 
 .messageInput {
   border: none;
-  border-bottom: 1px solid #ccc;
+  /* border-bottom: 1px solid #ccc; */
   width: 100%;
   font-size: 15px;
   margin-right: 1vw;

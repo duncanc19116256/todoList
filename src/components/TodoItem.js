@@ -7,8 +7,9 @@
  */
 
 import tStyle from "./style/TodoItem.module.css";
-
-function Card(props) {
+import { TextField, IconButton, Tooltip } from "@material-ui/core";
+import RemoveIcon from "@material-ui/icons/Remove";
+function TodoItem(props) {
   const { todoItemKey, deleteTodoItem, updateTodoItemMessage, addTodo, todo } =
     props;
 
@@ -26,27 +27,37 @@ function Card(props) {
     建議可以練習看把 focus 帶到新增的那一行
     */
     if (e.key === "Enter") {
+      e.preventDefault();
       addTodo();
-      e.target.blur();
     }
   };
 
   return (
     <div className={tStyle.todoItemContainer}>
-      <input
-        type="text"
-        placeholder="what to do... "
-        value={todo}
-        className={tStyle.messageInput}
+      <TextField
+        id="standard-textarea"
+        autoFocus
+        placeholder="what to do..."
         onChange={updateMessage}
         onKeyDown={handleKeyDown}
+        value={todo}
+        variant="standard"
+        size="small"
+        multiline
+        fullWidth
+        className={tStyle.messageInput}
       />
-
-      <div className={tStyle.deleteContainer} onClick={deleteCurrent}>
-        ✘
-      </div>
+      <Tooltip title="remove">
+        <IconButton
+          className={tStyle.deleteContainer}
+          aria-label="remove"
+          onClick={deleteCurrent}
+        >
+          <RemoveIcon fontSize="small" />
+        </IconButton>
+      </Tooltip>
     </div>
   );
 }
 
-export default Card;
+export default TodoItem;
